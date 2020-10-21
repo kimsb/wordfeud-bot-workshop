@@ -408,17 +408,6 @@ public class MDAGNode
     }
 
 
-    
-    /**
-     * Determines whether the sets of transition paths from two MDAGNodes are equivalent. This is an expensive operation.
-     
-     * @param outgoingTransitionTreeMap1        a TreeMap containing entries collectively representing
-     *                                          all of a node's outgoing transitions
-     * @param outgoingTransitionTreeMap2        a TreeMap containing entries collectively representing
-     *                                          all of a node's outgoing transitions
-     * @return                                  true if the set of transition paths from {@code node1}
-     *                                          and {@code node2} are equivalent
-     */
     public static boolean haveSameTransitions(MDAGNode node1, MDAGNode node2)
     {
         TreeMap<Character, MDAGNode> outgoingTransitionTreeMap1 = node1.outgoingTransitionTreeMap;

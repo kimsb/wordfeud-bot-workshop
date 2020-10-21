@@ -40,4 +40,8 @@ public class ScoreConstants {
         Integer letterScore = letterScores.get(letter);
         return letterScore == null ? 0 : letterScore;
     }
+
+    public static String validLetters() {
+        return "ABCDEFGHIJKLMNOPRSTUVWYÆØÅ";
+    }
 }
