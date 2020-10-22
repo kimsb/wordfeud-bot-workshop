@@ -1,4 +1,5 @@
 import mdag.MDAG;
+import mdag.MDAGNode;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -23,4 +24,7 @@ class Dictionary {
         return dictionary;
     }
 
+    static MDAGNode getSourceNode() {
+        return (MDAGNode) dictionary.getSourceNode();
+    }
 }

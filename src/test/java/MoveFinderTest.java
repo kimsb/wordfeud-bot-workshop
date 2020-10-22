@@ -2,7 +2,7 @@ import domain.BoardDO;
 import domain.MoveDO;
 import org.junit.Before;
 import org.junit.Test;
-import wordfeudapi.domain.Board;
+import wordfeudapi.domain.ApiBoard;
 import wordfeudapi.domain.TileMove;
 
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class MoveFinderTest {
         assertThat(sorted.get(sorted.size()-1).getPoints(), is(67));
     }
 
-    private static Board getStandardBoard() {
+    private static ApiBoard getStandardBoard() {
         int[] a = {2,0,0,0,4,0,0,1,0,0,4,0,0,0,2};
         int[] b = {0,1,0,0,0,2,0,0,0,2,0,0,0,1,0};
         int[] c = {0,0,3,0,0,0,1,0,1,0,0,0,3,0,0};
@@ -131,6 +131,6 @@ public class MoveFinderTest {
         int[] m = {0,0,3,0,0,0,1,0,1,0,0,0,3,0,0};
         int[] n = {0,1,0,0,0,2,0,0,0,2,0,0,0,1,0};
         int[] o = {2,0,0,0,4,0,0,1,0,0,4,0,0,0,2};
-        return new Board(new int[][]{a, b, c, d, e, f, g, h, i, j, k, l, m, n, o});
+        return new ApiBoard(new int[][]{a, b, c, d, e, f, g, h, i, j, k, l, m, n, o});
     }
 }

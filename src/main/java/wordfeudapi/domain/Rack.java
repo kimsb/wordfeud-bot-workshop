@@ -14,7 +14,7 @@ public class Rack {
 
     public boolean hasWildcard() {
         for (final char character : rack) {
-            if (character == Tile.WILDCARD) {
+            if (character == ApiTile.WILDCARD) {
                 return true;
             }
         }
@@ -40,7 +40,7 @@ public class Rack {
         final List<Character> duplicateLetters = new ArrayList<Character>();
 
         for (final char letter : rack) {
-            if (letter != Tile.WILDCARD) {
+            if (letter != ApiTile.WILDCARD) {
                 if (uniqueLetters.contains(letter)) {
                     duplicateLetters.add(letter);
                 } else {

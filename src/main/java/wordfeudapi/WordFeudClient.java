@@ -25,15 +25,15 @@ public interface WordFeudClient {
 
     Game getGame(long gameId);
 
-    Board getBoard(Game game);
+    ApiBoard getBoard(Game game);
 
-    Board getBoard(int boardId);
+    ApiBoard getBoard(int boardId);
 
     Status getStatus();
 
     PlaceResult makeMove(Game game, TileMove tileMove);
 
-    PlaceResult place(long gameId, RuleSet ruleset, Tile[] tiles, char[] word);
+    PlaceResult place(long gameId, RuleSet ruleset, ApiTile[] apiTiles, char[] word);
 
     String pass(Game game);
 

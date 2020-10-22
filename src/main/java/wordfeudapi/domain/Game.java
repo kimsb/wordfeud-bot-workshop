@@ -66,12 +66,12 @@ public class Game {
         this.updated = updated;
     }
 
-    public Tile[] getTiles() {
-        final Tile[] tiles = new Tile[this.tiles.length];
+    public ApiTile[] getTiles() {
+        final ApiTile[] apiTiles = new ApiTile[this.tiles.length];
         for (int i = 0, tiles1Length = this.tiles.length; i < tiles1Length; i++) {
-            tiles[i] = new Tile(this.tiles[i]);
+            apiTiles[i] = new ApiTile(this.tiles[i]);
         }
-        return tiles;
+        return apiTiles;
     }
 
     public boolean isRunning() {

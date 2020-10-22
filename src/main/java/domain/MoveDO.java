@@ -1,8 +1,8 @@
 package domain;
 
 import constants.ScoreConstants;
-import wordfeudapi.domain.Board;
-import wordfeudapi.domain.Tile;
+import wordfeudapi.domain.ApiBoard;
+import wordfeudapi.domain.ApiTile;
 import wordfeudapi.domain.TileMove;
 
 import java.util.ArrayList;
@@ -21,11 +21,11 @@ public class MoveDO {
     public boolean horizontal;
     public int moveScore;
     String usedFromRack;
-    ArrayList<Tile> addedTiles = new ArrayList<>();
-    Board board;
+    ArrayList<ApiTile> addedApiTiles = new ArrayList<>();
+    ApiBoard apiBoard;
 
-    public MoveDO(int r, int startColumn, boolean trans, String fromRack, char[][] charBoard, Board board) {
-        this.board = board;
+    public MoveDO(int r, int startColumn, boolean trans, String fromRack, char[][] charBoard, ApiBoard apiBoard) {
+        this.apiBoard = apiBoard;
         horizontal = trans;
         row = r;
         this.startColumn = startColumn;
@@ -55,10 +55,10 @@ public class MoveDO {
             char letter = charBoard[i][j+k];
             if (letter == '-') {
                 letter = usedFromRack.charAt(letterFromRack++);
-                addedTiles.add(new Tile(horizontal ? j+k : i, horizontal ? i : j+k, Character.toUpperCase(letter), Character.isLowerCase(letter)));
-                int letterScore = ScoreConstants.letterScore(letter) * board.getLetterMultiplier(i, j+k);
+                addedApiTiles.add(new ApiTile(horizontal ? j+k : i, horizontal ? i : j+k, Character.toUpperCase(letter), Character.isLowerCase(letter)));
+                int letterScore = ScoreConstants.letterScore(letter) * apiBoard.getLetterMultiplier(i, j+k);
                 horizontalScore += letterScore;
-                int wordMultiplier = board.getWordMultiplier(i, j+k);
+                int wordMultiplier = apiBoard.getWordMultiplier(i, j+k);
                 horizontalMultiplier *= wordMultiplier;
                 sum += getVerticalScore(charBoard, i, j+k, letter, letterScore, wordMultiplier);
             } else {
@@ -104,8 +104,8 @@ public class MoveDO {
     }
 
     public TileMove toTileMove() {
-        Tile[] tiles = addedTiles.toArray(new Tile[addedTiles.size()]);
-        return new TileMove(tiles, word, moveScore, horizontal);
+        ApiTile[] apiTiles = addedApiTiles.toArray(new ApiTile[addedApiTiles.size()]);
+        return new TileMove(apiTiles, word, moveScore, horizontal);
     }
 
 }

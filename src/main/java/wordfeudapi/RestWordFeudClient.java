@@ -166,7 +166,7 @@ public class RestWordFeudClient implements WordFeudClient {
      * @return The board
      */
     @Override
-    public Board getBoard(final Game game) {
+    public ApiBoard getBoard(final Game game) {
         return getBoard(game.getBoard());
     }
 
@@ -178,12 +178,12 @@ public class RestWordFeudClient implements WordFeudClient {
      * @return The WordFeud API response
      */
     @Override
-    public Board getBoard(final int boardId) {
+    public ApiBoard getBoard(final int boardId) {
         final String path = "/board/" + boardId + "/";
 
         final JSONObject json = callAPI(path);
         try {
-            return Board.fromJson(json.getString("content"));
+            return ApiBoard.fromJson(json.getString("content"));
         } catch (JSONException e) {
             throw new RuntimeException("Could not deserialize JSON", e);
         }
@@ -217,7 +217,7 @@ public class RestWordFeudClient implements WordFeudClient {
      */
     @Override
     public PlaceResult makeMove(final Game game, final TileMove tileMove) {
-        return place(game.getId(), game.getRuleset(), tileMove.getTiles(), tileMove.getWord().toCharArray());
+        return place(game.getId(), game.getRuleset(), tileMove.getApiTiles(), tileMove.getWord().toCharArray());
     }
 
     /**
@@ -227,18 +227,18 @@ public class RestWordFeudClient implements WordFeudClient {
      *            The ID of the game to place the word on
      * @param ruleset
      *            The ruleset the game is using
-     * @param tiles
+     * @param apiTiles
      *            The tiles to place (only the tiles to be placed = tiles from the users rack)
      * @param word
      *            The whole word to place (including tiles already on the board)
      * @return The placement result
      */
     @Override
-    public PlaceResult place(final long gameId, final RuleSet ruleset, final Tile[] tiles, final char[] word) {
+    public PlaceResult place(final long gameId, final RuleSet ruleset, final ApiTile[] apiTiles, final char[] word) {
         final String path = "/game/" + gameId + "/move/";
 
         final HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("move", Tile.convert(tiles));
+        parameters.put("move", ApiTile.convert(apiTiles));
         parameters.put("ruleset", ruleset.getApiIntRepresentation());
         parameters.put("word", word);
 

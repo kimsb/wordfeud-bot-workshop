@@ -1,7 +1,7 @@
 import domain.BoardDO;
 import domain.MoveDO;
 import mdag.MDAGNode;
-import wordfeudapi.domain.Board;
+import wordfeudapi.domain.ApiBoard;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -10,10 +10,10 @@ import java.util.TreeMap;
 public class MoveFinder {
 
     private ArrayList<MoveDO> allMoves;
-    private Board board;
+    private ApiBoard apiBoard;
 
-    MoveFinder(Board board) {
-        this.board = board;
+    MoveFinder(ApiBoard apiBoard) {
+        this.apiBoard = apiBoard;
     }
 
     public ArrayList<MoveDO> findAllMoves(BoardDO boardDO, String rack) {
@@ -78,7 +78,7 @@ public class MoveFinder {
             //if N si a terminal node
             if (squareJ != currentAnchorJ && n.isAcceptNode()) {
                 MoveDO newPos = new MoveDO(currentAnchorI, (squareJ - partialWord.length()), transposed,
-                        usedFromRack, (transposed ? boardDO.getTransposedCharBoard() : boardDO.getCharBoard()), board);
+                        usedFromRack, (transposed ? boardDO.getTransposedCharBoard() : boardDO.getCharBoard()), apiBoard);
 
                 allMoves.add(newPos);
             }

@@ -4,20 +4,20 @@ package wordfeudapi.domain;
  * @author Pierre Ingmansson
  */
 public class TileMove implements Comparable<TileMove> {
-    private final Tile[] tiles;
+    private final ApiTile[] apiTiles;
     private final String word;
     private final int points;
     private final boolean horizontalWord;
 
-    public TileMove(final Tile[] tiles, final String word, final int points, final boolean horizontalWord) {
-        this.tiles = tiles;
+    public TileMove(final ApiTile[] apiTiles, final String word, final int points, final boolean horizontalWord) {
+        this.apiTiles = apiTiles;
         this.word = word;
         this.points = points;
         this.horizontalWord = horizontalWord;
     }
 
-    public Tile[] getTiles() {
-        return tiles;
+    public ApiTile[] getApiTiles() {
+        return apiTiles;
     }
 
     public String getWord() {

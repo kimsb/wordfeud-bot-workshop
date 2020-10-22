@@ -1,6 +1,6 @@
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import wordfeudapi.domain.Tile
+import wordfeudapi.domain.ApiTile
 import java.util.*
 
 class WordfeudTestKtTest {
@@ -11,7 +11,7 @@ class WordfeudTestKtTest {
         //TODO init av denne kun én gang
         Dictionary.initialize()
 
-        val squares = crossChecksForRow(createRow("-----BJØRN-BÆR-"))
+        val squares = crossChecksForRow(createTestRow())
 
         assertThat(squares[0].crossChecks).`as`("Her skulle alle bits vært satt").isEqualTo(fullBitSet())
         assertThat(squares[1].crossChecks).`as`("Her skulle alle bits vært satt").isEqualTo(fullBitSet())
@@ -36,10 +36,33 @@ class WordfeudTestKtTest {
     }
 
     @Test
-    fun testCrossSum() {
+    fun testCrossAnchors() {
         Dictionary.initialize()
 
-        val squares = crossChecksForRow(createRow("-----BJØRN-BÆR-"))
+        val squares = crossChecksForRow(createTestRow())
+
+        assertThat(squares[0].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[1].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[2].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[3].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[4].crossAnchor).`as`("Her skulle crossAnchor vært true").isTrue
+        assertThat(squares[5].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[6].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[7].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[8].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[9].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[10].crossAnchor).`as`("Her skulle crossAnchor vært true").isTrue
+        assertThat(squares[11].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[12].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[13].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
+        assertThat(squares[14].crossAnchor).`as`("Her skulle crossAnchor vært true").isTrue
+    }
+
+    @Test
+    fun testCrossSums() {
+        Dictionary.initialize()
+
+        val squares = crossChecksForRow(createTestRow())
 
         assertThat(squares[0].crossSum).`as`("Her skulle crossSum vært 0 (har ingen prefix eller suffix)").isEqualTo(0)
         assertThat(squares[1].crossSum).`as`("Her skulle crossSum vært 0 (har ingen prefix eller suffix)").isEqualTo(0)
@@ -58,8 +81,14 @@ class WordfeudTestKtTest {
         assertThat(squares[14].crossSum).`as`("Her skulle crossSum vært 13 (for BÆR)").isEqualTo(13)
     }
 
-    private fun createRow(tiles: String): Row {
-        return Row(tiles.map { if (it == '-') Square() else Square(tile = Tile(1, 1, it, false)) })
+    private fun createTestRow(): Row {
+        return Row("-----BJØRN-BÆR-"
+            .map {
+                if (it == '-')
+                    Square()
+                else
+                    Square(apiTile = ApiTile(1, 1, it, false))
+            })
     }
 
     private fun fullBitSet(): BitSet {

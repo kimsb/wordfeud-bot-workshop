@@ -7,22 +7,22 @@ import java.util.Arrays;
 /**
  * @author Pierre Ingmansson (piin00)
  */
-public class Board {
+public class ApiBoard {
     private int[][] board;
 
-    public Board(final int[][] board) {
+    public ApiBoard(final int[][] board) {
         this.board = board;
     }
 
-    public Board() {
+    public ApiBoard() {
     }
 
     public int[][] getBoard() {
         return board;
     }
 
-    public static Board fromJson(final String json) {
-        return new Gson().fromJson(json, Board.class);
+    public static ApiBoard fromJson(final String json) {
+        return new Gson().fromJson(json, ApiBoard.class);
     }
 
     @Override

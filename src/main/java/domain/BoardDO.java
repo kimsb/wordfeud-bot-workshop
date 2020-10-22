@@ -1,6 +1,6 @@
 package domain;
 
-import wordfeudapi.domain.Tile;
+import wordfeudapi.domain.ApiTile;
 
 public class BoardDO {
 
@@ -10,11 +10,11 @@ public class BoardDO {
         this.charBoard = charBoard;
     }
 
-    public BoardDO(Tile[] tiles) {
+    public BoardDO(ApiTile[] apiTiles) {
         charBoard = getEmptyCharBoard();
-        for (Tile tile : tiles) {
-            charBoard[tile.getX()][tile.getY()]
-                    = tile.isWildcard() ? Character.toLowerCase(tile.getCharacter()) : tile.getCharacter();
+        for (ApiTile apiTile : apiTiles) {
+            charBoard[apiTile.getX()][apiTile.getY()]
+                    = apiTile.isWildcard() ? Character.toLowerCase(apiTile.getCharacter()) : apiTile.getCharacter();
         }
     }
 
