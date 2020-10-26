@@ -5,10 +5,10 @@ import java.util.*;
 /**
  * @author Pierre Ingmansson
  */
-public class Rack {
+public class ApiRack {
     private final char[] rack;
 
-    public Rack(final char... rack) {
+    public ApiRack(final char... rack) {
         this.rack = rack;
     }
 

@@ -124,8 +124,8 @@ public class Game {
         throw new IllegalStateException("Opponent player not found in game!");
     }
 
-    public Rack getMyRack() {
-        return new Rack(getMe().getRack());
+    public ApiRack getMyRack() {
+        return new ApiRack(getMe().getRack());
     }
 
     public PlayerInGame[] getPlayers() {

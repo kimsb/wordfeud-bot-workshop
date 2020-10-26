@@ -76,17 +76,19 @@ class Bot {
     }
 
     private List<TileMove> findBestMoves(Game game) {
-        Rack rack = game.getMyRack();
+        ApiRack apiRack = game.getMyRack();
 
         //TODO bruke board fra API for DW, TW osv...
         //wordfeud.api.Board board = botClient.getBoard(game);
         ApiTile[] apiTiles = game.getTiles();
 
         ApiBoard apiBoard = botClient.getBoard(game);
-        new Board(apiBoard, apiTiles);
 
+        //nytt
+        Board board = new Board(apiBoard, apiTiles);
+        WordfeudTestKt.findAllMoves(board, apiRack.toString());
 
-        ArrayList<MoveDO> allMoves = new MoveFinder(apiBoard).findAllMoves(new BoardDO(apiTiles), new String(rack.chars()));
+        ArrayList<MoveDO> allMoves = new MoveFinder(apiBoard).findAllMoves(new BoardDO(apiTiles), new String(apiRack.chars()));
 
         return allMoves.stream()
                 .map(MoveDO::toTileMove)

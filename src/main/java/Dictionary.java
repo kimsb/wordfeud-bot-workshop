@@ -11,6 +11,11 @@ class Dictionary {
 
     private static MDAG dictionary;
 
+
+    //TODO remove
+    //TEST
+    static int ordFunnet = 0;
+
     static void initialize() {
         Dictionary dictionary = new Dictionary();
         ClassLoader classLoader = dictionary.getClass().getClassLoader();
