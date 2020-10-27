@@ -7,9 +7,7 @@ data class Square(
     val isAnchor: Boolean = false,
     val crossSum: Int = 0,
     val letterMultiplier: Int = 1,
-    val wordMultiplier: Int = 1,
-    val nextSquare: Square? = null
-
+    val wordMultiplier: Int = 1
 ) {
     fun isOccupied(): Boolean {
         return tile != null

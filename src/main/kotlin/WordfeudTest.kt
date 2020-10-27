@@ -22,7 +22,7 @@ fun findAllMoves(board: Board, rackString: String): List<String> {
     }
 
     println("STARTER COLUMNS:")
-    val lovligeOrdColumns = board.getTransposedColumnsWithCrossChecks().flatMapIndexed { index, it ->
+    val lovligeOrdColumns = board.getTransposedRowsWithCrossChecks().flatMapIndexed { index, it ->
         println("COLUMN-INDEX: $index")
         it.findAcrossMoves(Rack(rackString.toList()))
     }

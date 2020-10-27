@@ -37,7 +37,6 @@ data class Row(
                     bitSet.flip(0, 26)
                 } else {
                     bitSet = validCrossCheckLetters(prefix, suffix)
-                    //TODO ta hensyn til blank i crossSum
                     crossSum = (prefix + suffix).map(ScoreConstants::letterScore).sum()
                 }
             }
@@ -58,6 +57,7 @@ data class Row(
                 if (prefix.isNotEmpty()) {
                     extendRight(prefix, getSourceNode().transition(prefix), index, rack)
                 } else {
+                    //TODO kan dette gjøres penere?
                     var limit = 0
                     for (i in index - 1 downTo 0) {
                         if (squares[i].isAnchor) {

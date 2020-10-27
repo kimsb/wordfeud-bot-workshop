@@ -33,11 +33,11 @@ class Board(squares: List<List<Square>>) {
     )
 
     fun getRowsWithCrossChecks(): List<Row> {
-        return Board(getColumnsAsRows().map(Row::crossChecks)).transpose().getRows()
+        return Board(getTransposedRows().map(Row::crossChecks)).getTransposedRows()
     }
 
-    fun getTransposedColumnsWithCrossChecks(): List<Row> {
-        return Board(getRows().map(Row::crossChecks)).getColumnsAsRows()
+    fun getTransposedRowsWithCrossChecks(): List<Row> {
+        return Board(getRows().map(Row::crossChecks)).getTransposedRows()
     }
 
     fun transpose(): Board {
@@ -48,31 +48,15 @@ class Board(squares: List<List<Square>>) {
         })
     }
 
-    //TODO trenger man sette nextSquare nå..? eller bare transpose?
     private fun getRows(): List<Row> {
-        return squares.map { row ->
-            var previousSquare: Square? = null
-            Row(
-                row.reversed().map { square ->
-                    val updatedSquare = square.copy(nextSquare = previousSquare)
-                    previousSquare = updatedSquare
-                    updatedSquare
-                }.reversed()
-            )
+        return squares.map {
+            Row(it)
         }
     }
 
-    //TODO trenger man sette nextSquare nå..?
-    private fun getColumnsAsRows(): List<Row> {
-        return (squares.indices).map { column ->
-            var previousSquare: Square? = null
-            Row(
-                (squares.indices.reversed()).map { row ->
-                    val updatedSquare = squares[row][column].copy(nextSquare = previousSquare)
-                    previousSquare = updatedSquare
-                    updatedSquare
-                }.reversed()
-            )
+    private fun getTransposedRows(): List<Row> {
+        return transpose().squares.map {
+            Row(it)
         }
     }
 }
