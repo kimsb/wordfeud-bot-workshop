@@ -7,6 +7,9 @@ import java.util.*
 data class Row(
     val squares: List<Square>
 ) {
+
+    private val rowMoves = mutableListOf<RowMove>()
+
     private fun getPrefix(startIndex: Int): String {
         val builder = StringBuilder()
         var index = startIndex
@@ -25,7 +28,6 @@ data class Row(
         return builder.toString()
     }
 
-    //CROSSCHECKS + CROSSUM
     fun crossChecks(): List<Square> {
         return squares.mapIndexed { index, square ->
             var bitSet = BitSet(26)
@@ -46,14 +48,22 @@ data class Row(
         }
     }
 
-    private var currentAnchor = 0
+    private fun validCrossCheckLetters(prefix: String, suffix: String): BitSet {
+        val bitset = BitSet(26)
+        ScoreConstants.validLetters().forEachIndexed { index, char ->
+            bitset.set(index,
+                Dictionary.contains(prefix + char + suffix)
+            )
+        }
+        return bitset
+    }
+
     fun findAcrossMoves(rack: Rack): List<RowMove> {
         squares.forEachIndexed { index, square ->
             if (square.isAnchor) {
-                currentAnchor = index //TODO må jeg gjøre dette?
                 val prefix = getPrefix(index)
                 if (prefix.isNotEmpty()) {
-                    extendRight(prefix, getSourceNode().transition(prefix), index, rack)
+                    extendRight(prefix, getSourceNode().transition(prefix), index, index, rack)
                 } else {
                     //TODO kan dette gjøres penere?
                     var limit = 0
@@ -106,7 +116,7 @@ if limit > 0 then
         anchorIndex: Int,
         rack: Rack
     ) {
-        extendRight(partialWord, node, anchorIndex, rack)
+        extendRight(partialWord, node, anchorIndex, anchorIndex, rack)
         if (limit > 0) {
             node.outgoingTransitions.entries.forEach {
                 if (rack.contains(it.key)) {
@@ -139,42 +149,33 @@ else
     private fun extendRight(
         partialWord: String,
         node: MDAGNode,
+        anchorIndex: Int,
         index: Int,
         rack: Rack
     ) {
         val square = squares.getOrElse(index) { Square() }
         if (!square.isOccupied()) {
-            if (index != currentAnchor && node.isAcceptNode) { //TODO må ha brukt brikker! //TODO kan ikke være anchor, sant?
+            if (index != anchorIndex && node.isAcceptNode) {
                 rowMoves.add(RowMove(partialWord,
                     index - partialWord.length,
                     calculateScore(partialWord, index - partialWord.length)))
             }
             node.outgoingTransitions.entries.forEach {
                 if (rack.contains(it.key) && square.crossChecksContains(it.key)) {
-                    extendRight(partialWord + it.key, it.value, index + 1, rack.without(it.key))
+                    extendRight(partialWord + it.key, it.value, anchorIndex, index + 1, rack.without(it.key))
                 }
                 if (rack.contains('*') && square.crossChecksContains(it.key)) {
-                    extendRight(partialWord + it.key.toLowerCase(), it.value, index + 1, rack.without('*'))
+                    extendRight(partialWord + it.key.toLowerCase(), it.value, anchorIndex, index + 1, rack.without('*'))
                 }
             }
         } else {
             //TODO dette var annerledes, kan jeg gjøre det tilbake?
             square.getLetter()?.let {
                 if (node.hasOutgoingTransition(it)) {
-                    extendRight(partialWord + it, node.transition(it), index + 1, rack)
+                    extendRight(partialWord + it, node.transition(it), anchorIndex,index + 1, rack)
                 }
             }
         }
-
     }
 
-    // TODO kan kanskje la extendRight returnere en liste med wordsStartingAt..?
-    private val rowMoves = mutableListOf<RowMove>()
-
 }
-
-data class RowMove(
-    val word: String,
-    val startIndex: Int,
-    val score: Int
-)

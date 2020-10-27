@@ -4,7 +4,6 @@ import wordfeudapi.domain.ApiTile
 class Board(squares: List<List<Square>>) {
     val squares: List<List<Square>>
 
-    //Setter isAnchor for hver square
     init {
         this.squares = squares.mapIndexed { i, row ->
             row.mapIndexed { j, square ->
@@ -32,11 +31,11 @@ class Board(squares: List<List<Square>>) {
         }
     )
 
-    fun getRowsWithCrossChecks(): List<Row> {
+    private fun getRowsWithCrossChecks(): List<Row> {
         return Board(getTransposedRows().map(Row::crossChecks)).getTransposedRows()
     }
 
-    fun getTransposedRowsWithCrossChecks(): List<Row> {
+    private fun getTransposedRowsWithCrossChecks(): List<Row> {
         return Board(getRows().map(Row::crossChecks)).getTransposedRows()
     }
 
@@ -60,14 +59,14 @@ class Board(squares: List<List<Square>>) {
         }
     }
 
-    fun findAllMoves(rackString: String): List<Move> {
+    fun findAllMoves(rack: Rack): List<Move> {
         val rowMoves = getRowsWithCrossChecks().flatMapIndexed { index, it ->
-            it.findAcrossMoves(Rack(rackString.toList())).map {
+            it.findAcrossMoves(rack).map {
                 toMove(it, index, true)
             }
         }
         val columnMoves = getTransposedRowsWithCrossChecks().flatMapIndexed { index, it ->
-            it.findAcrossMoves(Rack(rackString.toList())).map {
+            it.findAcrossMoves(rack).map {
                 toMove(it, index, false)
             }
         }
@@ -75,7 +74,7 @@ class Board(squares: List<List<Square>>) {
     }
 
     private fun toMove(rowMove: RowMove, rowIndex: Int, horizontal: Boolean): Move {
-        val addedTiles = (0 until rowMove.word.length).filterIndexed { index, i ->
+        val addedTiles = (rowMove.word.indices).filterIndexed { index, i ->
             if (horizontal) {
                 !squares[rowIndex][rowMove.startIndex + index].isOccupied()
             } else {

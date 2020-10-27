@@ -7,9 +7,6 @@ class WordfeudTestKtTest {
     @Test
     fun testCrossChecks() {
 
-        //TODO init av denne kun én gang
-        Dictionary.initialize()
-
         val squares = createTestRow().crossChecks()
 
         assertThat(squares[0].crossChecks).`as`("Her skulle alle bits vært satt").isEqualTo(fullBitSet())
@@ -59,7 +56,6 @@ class WordfeudTestKtTest {
 
     @Test
     fun testCrossSums() {
-        Dictionary.initialize()
 
         val squares = createTestRow().crossChecks()
 

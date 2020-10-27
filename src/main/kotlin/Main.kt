@@ -1,8 +1,6 @@
-public class Main {
-
-    public static void main(String[] args) {
-        Dictionary.initialize();
-        new Bot();
+object Main {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        Bot()
     }
-
 }
