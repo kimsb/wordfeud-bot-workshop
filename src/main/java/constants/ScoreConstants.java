@@ -44,4 +44,14 @@ public class ScoreConstants {
     public static String validLetters() {
         return "ABCDEFGHIJKLMNOPRSTUVWYÆØÅ";
     }
+
+    public static boolean wordContainsValidLetters(String word) {
+        String validLetters = validLetters();
+        for (int i = 0; i < word.length(); i++) {
+            if (validLetters.indexOf(word.charAt(i)) == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -11,34 +11,6 @@ fun validCrossCheckLetters(prefix: String, suffix: String): BitSet {
     return bitset
 }
 
-//KUN CROSSCHEKS
-/*fun crossChecksForRow(row: Row): List<Square> {
-    return row.squares.mapIndexed { index, square ->
-        var bitSet = BitSet(26)
-        if (!square.isOccupied()) {
-            val prefix = row.getPrefix(index)
-            val suffix = row.getSuffix(index)
-
-            if (prefix.isEmpty() && suffix.isEmpty()) {
-                bitSet.flip(0, 26)
-            } else {
-                bitSet = validCrossCheckLetters(prefix, suffix)
-            }
-        }
-        square.copy(crossChecks = bitSet)
-    }
-}*/
-
-
-
-
-
-
-
-
-
-
-
 fun findAllMoves(board: Board, rackString: String): List<String> {
 
     val dictionary = Dictionary.getDictionary();

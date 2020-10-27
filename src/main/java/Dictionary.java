@@ -1,3 +1,4 @@
+import constants.ScoreConstants;
 import mdag.MDAG;
 import mdag.MDAGNode;
 
@@ -16,7 +17,9 @@ class Dictionary {
         ClassLoader classLoader = dictionary.getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("nsf2020.txt");
         List<String> words = new BufferedReader(new InputStreamReader(inputStream))
-                .lines().collect(Collectors.toList());
+                .lines()
+                .filter(ScoreConstants::wordContainsValidLetters)
+                .collect(Collectors.toList());
         Dictionary.dictionary = (new MDAG(words));
     }
 
