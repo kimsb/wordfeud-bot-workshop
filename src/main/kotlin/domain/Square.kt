@@ -1,3 +1,5 @@
+package domain
+
 import constants.ScoreConstants
 import java.util.*
 

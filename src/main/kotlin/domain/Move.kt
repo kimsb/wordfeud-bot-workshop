@@ -1,3 +1,5 @@
+package domain
+
 import wordfeudapi.domain.ApiTile
 import wordfeudapi.domain.TileMove
 

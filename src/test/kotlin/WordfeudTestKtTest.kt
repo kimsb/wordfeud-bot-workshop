@@ -1,3 +1,6 @@
+import domain.Row
+import domain.Square
+import domain.Tile
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.*

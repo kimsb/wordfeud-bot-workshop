@@ -1,3 +1,5 @@
+import domain.Board
+import domain.Rack
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -192,9 +194,9 @@ class BoardTest {
         }
         ApiTile[] apiTilesArray = Arrays.stream(apiTiles.toArray()).toArray(ApiTile[]::new);
 
-        Board boardWithTiles = new Board(emptyApiBoard, apiTilesArray);
+        domain.Board boardWithTiles = new domain.Board(emptyApiBoard, apiTilesArray);
 
-        List<Move> nyeMoves = boardWithTiles.findAllMoves("DNSPRIA");
+        List<domain.Move> nyeMoves = boardWithTiles.findAllMoves("DNSPRIA");
 
         System.out.println();
     }

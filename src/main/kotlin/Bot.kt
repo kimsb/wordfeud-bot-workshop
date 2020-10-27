@@ -1,3 +1,6 @@
+import domain.Board
+import domain.Move
+import domain.Rack
 import wordfeudapi.RestWordFeudClient
 import wordfeudapi.domain.Game
 import java.lang.Thread.sleep

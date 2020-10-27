@@ -27,7 +27,7 @@ public class ApiBoard {
 
     @Override
     public String toString() {
-        return "Board{" +
+        return "domain.Board{" +
                 "board=" + Arrays.toString(board) +
                 '}';
     }

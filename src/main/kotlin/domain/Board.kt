@@ -1,3 +1,5 @@
+package domain
+
 import wordfeudapi.domain.ApiBoard
 import wordfeudapi.domain.ApiTile
 

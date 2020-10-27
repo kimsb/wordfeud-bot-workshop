@@ -1,3 +1,5 @@
+package domain
+
 data class Rack(
     val tiles: List<Char>
 ) {

@@ -1,3 +1,5 @@
+package domain
+
 import Dictionary.getSourceNode
 import constants.ScoreConstants
 import constants.ScoreConstants.letterScore

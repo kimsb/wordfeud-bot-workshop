@@ -23,6 +23,6 @@ public enum BoardType {
                 return boardType;
             }
         }
-        throw new IllegalArgumentException("Board type matching \"" + string + "\" not found!");
+        throw new IllegalArgumentException("domain.Board type matching \"" + string + "\" not found!");
     }
 }
