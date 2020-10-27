@@ -1,4 +1,4 @@
-import constants.ScoreConstants
+import Constants.VALID_LETTERS
 import mdag.MDAG
 import mdag.MDAGNode
 
@@ -10,7 +10,7 @@ object Dictionary {
         val words = Main::class.java.getResourceAsStream("nsf2020.txt")
             .bufferedReader()
             .readLines()
-            .filter(ScoreConstants::wordContainsValidLetters)
+            .filter(this::wordContainsValidLetters)
         instance = MDAG(words)
     }
 
@@ -20,5 +20,14 @@ object Dictionary {
 
     fun getSourceNode(): MDAGNode {
         return instance.sourceNode as MDAGNode
+    }
+
+    private fun wordContainsValidLetters(word: String): Boolean {
+        word.forEach {
+            if (!VALID_LETTERS.contains(it)) {
+                return false
+            }
+        }
+        return true
     }
 }

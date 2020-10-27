@@ -1,6 +1,6 @@
 package domain
 
-import constants.ScoreConstants
+import Constants.VALID_LETTERS
 import java.util.*
 
 data class Square(
@@ -20,6 +20,6 @@ data class Square(
     }
 
     fun crossChecksContains(letter: Char): Boolean {
-        return crossChecks[ScoreConstants.validLetters().indexOf(letter)]
+        return crossChecks[VALID_LETTERS.indexOf(letter)]
     }
 }

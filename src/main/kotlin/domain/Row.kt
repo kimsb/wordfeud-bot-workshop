@@ -1,8 +1,10 @@
 package domain
 
+import Constants
+import Constants.VALID_LETTERS
+import Constants.letterScore
+import Dictionary.contains
 import Dictionary.getSourceNode
-import constants.ScoreConstants
-import constants.ScoreConstants.letterScore
 import mdag.MDAGNode
 import java.util.*
 
@@ -42,7 +44,7 @@ data class Row(
                     bitSet.flip(0, 26)
                 } else {
                     bitSet = validCrossCheckLetters(prefix, suffix)
-                    crossSum = if ((prefix + suffix).isEmpty()) null else (prefix + suffix).map(ScoreConstants::letterScore).sum()
+                    crossSum = if ((prefix + suffix).isEmpty()) null else (prefix + suffix).map(Constants::letterScore).sum()
                 }
             }
             square.copy(crossChecks = bitSet,
@@ -52,9 +54,8 @@ data class Row(
 
     private fun validCrossCheckLetters(prefix: String, suffix: String): BitSet {
         val bitset = BitSet(26)
-        ScoreConstants.validLetters().forEachIndexed { index, char ->
-            bitset.set(index,
-                Dictionary.contains(prefix + char + suffix)
+        VALID_LETTERS.forEachIndexed { index, char ->
+            bitset.set(index, contains(prefix + char + suffix)
             )
         }
         return bitset
@@ -174,7 +175,7 @@ else
             //TODO dette var annerledes, kan jeg gjøre det tilbake?
             square.getLetter()?.let {
                 if (node.hasOutgoingTransition(it)) {
-                    extendRight(partialWord + it, node.transition(it), anchorIndex,index + 1, rack)
+                    extendRight(partialWord + it, node.transition(it), anchorIndex, index + 1, rack)
                 }
             }
         }
