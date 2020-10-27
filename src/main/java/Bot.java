@@ -86,17 +86,26 @@ class Bot {
 
         //nytt
         Board board = new Board(apiBoard, apiTiles);
-        List<String> nyeMoves = WordfeudTestKt.findAllMoves(board, new String(apiRack.chars()));
+        List<TileMove> nyeMoves = board.findAllMoves(new String(apiRack.chars()))
+                .stream().map(Move::toTileMove)
+                .collect(Collectors.toList());
 
         ArrayList<MoveDO> allMoves = new MoveFinder(apiBoard).findAllMoves(new BoardDO(apiTiles), new String(apiRack.chars()));
+
+        //TEST
+        List<TileMove> nyCollect = nyeMoves.stream()
+                .sorted(Comparator.comparingInt(TileMove::getPoints))
+                .collect(Collectors.toList());
+
+        List<TileMove> gammelCollect = allMoves.stream()
+                .map(MoveDO::toTileMove)
+                .sorted(Comparator.comparingInt(TileMove::getPoints))
+                .collect(Collectors.toList());
 
         System.out.println("NY: " + nyeMoves.size());
         System.out.println("GAMMEL: " + allMoves.size());
 
-        return allMoves.stream()
-                .map(MoveDO::toTileMove)
-                .sorted(Comparator.comparingInt(TileMove::getPoints))
-                .collect(Collectors.toList());
+        return gammelCollect;
     }
 
 }

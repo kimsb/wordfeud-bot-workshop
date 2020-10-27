@@ -1,12 +1,13 @@
 import Dictionary.getSourceNode
 import constants.ScoreConstants
+import constants.ScoreConstants.letterScore
 import mdag.MDAGNode
 import java.util.*
 
 data class Row(
     val squares: List<Square>
 ) {
-    fun getPrefix(startIndex: Int): String {
+    private fun getPrefix(startIndex: Int): String {
         val builder = StringBuilder()
         var index = startIndex
         while (--index in squares.indices && squares[index].isOccupied()) {
@@ -15,7 +16,7 @@ data class Row(
         return builder.reverse().toString()
     }
 
-    fun getSuffix(startIndex: Int): String {
+    private fun getSuffix(startIndex: Int): String {
         val builder = StringBuilder()
         var index = startIndex
         while (++index in squares.indices && squares[index].isOccupied()) {
@@ -45,8 +46,8 @@ data class Row(
         }
     }
 
-    var currentAnchor = 0
-    fun findAcrossMoves(rack: Rack): List<String> {
+    private var currentAnchor = 0
+    fun findAcrossMoves(rack: Rack): List<RowMove> {
         squares.forEachIndexed { index, square ->
             if (square.isAnchor) {
 
@@ -69,7 +70,26 @@ data class Row(
                 }
             }
         }
-        return lovligeOrd
+        return rowMoves
+    }
+
+    private fun calculateScore(word: String, startIndex: Int): Int {
+        var wordMultiplier = 1
+        var crossSums = 0
+        var addedLetters = 0
+        return squares.subList(startIndex, startIndex + word.length).mapIndexed { index, square ->
+            if (square.isOccupied()) {
+                letterScore(square.getLetter()!!)
+            } else {
+                addedLetters++
+                wordMultiplier *= square.wordMultiplier
+                val squareScore = letterScore(word[index]) * square.letterMultiplier
+                if (square.crossSum > 0) {
+                    crossSums += (squareScore + square.crossSum) * square.wordMultiplier
+                }
+                squareScore
+            }
+        }.sum() * wordMultiplier + crossSums + (if (addedLetters == 7) 40 else 0)
     }
 
     /*
@@ -82,7 +102,13 @@ if limit > 0 then
         Leftpart (PartialWord . 1, N', limit - 1)
         put the tile 1 back into the rack
 */
-    fun leftPart(partialWord: String, node: MDAGNode, limit: Int, anchorIndex: Int, rack: Rack) {
+    private fun leftPart(
+        partialWord: String,
+        node: MDAGNode,
+        limit: Int,
+        anchorIndex: Int,
+        rack: Rack
+    ) {
         extendRight(partialWord, node, anchorIndex, rack)
         if (limit > 0) {
             node.outgoingTransitions.entries.forEach {
@@ -113,13 +139,20 @@ else
         let next-square be the square to the right of square
         ExtendRight (PartialWord . 1, N', next-square )
 */
-    fun extendRight(partialWord: String, node: MDAGNode, index: Int, rack: Rack) {
+    private fun extendRight(
+        partialWord: String,
+        node: MDAGNode,
+        index: Int,
+        rack: Rack
+    ) {
         val square = squares.getOrElse(index) { Square() }
         if (!square.isOccupied()) {
             if (index != currentAnchor && node.isAcceptNode) { //TODO må ha brukt brikker! //TODO kan ikke være anchor, sant?
                 //TODO legal move
                 println("$partialWord - index: $index, leftOnRack: ${rack.tiles.joinToString()}")
-                lovligeOrd.add(partialWord)
+                rowMoves.add(RowMove(partialWord,
+                    index - partialWord.length,
+                    calculateScore(partialWord, index - partialWord.length)))
             }
             node.outgoingTransitions.entries.forEach {
                 if (rack.contains(it.key) && square.crossChecksContains(it.key)) {
@@ -140,5 +173,13 @@ else
 
     }
 
-    val lovligeOrd = mutableListOf<String>()
+    // TODO kan kanskje la extendRight returnere en liste med wordsStartingAt..?
+    private val rowMoves = mutableListOf<RowMove>()
+
 }
+
+data class RowMove(
+    val word: String,
+    val startIndex: Int,
+    val score: Int
+)

@@ -152,7 +152,7 @@ public class MoveFinderTest {
 
         Board boardWithTiles = new Board(emptyApiBoard, apiTilesArray);
 
-        List<String> nyeMoves = WordfeudTestKt.findAllMoves(boardWithTiles, "DNSPRIA");
+        List<Move> nyeMoves = boardWithTiles.findAllMoves("DNSPRIA");
 
         System.out.println();
     }

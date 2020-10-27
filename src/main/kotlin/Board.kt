@@ -59,4 +59,42 @@ class Board(squares: List<List<Square>>) {
             Row(it)
         }
     }
+
+    fun findAllMoves(rackString: String): List<Move> {
+        val rowMoves = getRowsWithCrossChecks().flatMapIndexed { index, it ->
+            it.findAcrossMoves(Rack(rackString.toList())).map {
+                toMove(it, index, true)
+            }
+        }
+        val columnMoves = getTransposedRowsWithCrossChecks().flatMapIndexed { index, it ->
+            it.findAcrossMoves(Rack(rackString.toList())).map {
+                toMove(it, index, false)
+            }
+        }
+        return rowMoves + columnMoves
+    }
+
+    private fun toMove(rowMove: RowMove, rowIndex: Int, horizontal: Boolean): Move {
+        val addedTiles = (0 until rowMove.word.length).filterIndexed { index, i ->
+            if (horizontal) {
+                !squares[rowIndex][rowMove.startIndex + index].isOccupied()
+            } else {
+                !squares[rowMove.startIndex + index][rowIndex].isOccupied()
+            }
+        }.map {
+            if (horizontal) {
+                Pair(Tile(rowMove.word[it]), Coordinate(rowIndex, rowMove.startIndex + it))
+            } else {
+                Pair(Tile(rowMove.word[it]), Coordinate(rowMove.startIndex + it, rowIndex))
+            }
+        }
+        return Move(
+            rowMove.word,
+            rowMove.score,
+            rowIndex,
+            horizontal,
+            addedTiles
+        )
+    }
+
 }
