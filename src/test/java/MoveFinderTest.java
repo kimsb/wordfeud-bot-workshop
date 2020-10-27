@@ -3,9 +3,11 @@ import domain.MoveDO;
 import org.junit.Before;
 import org.junit.Test;
 import wordfeudapi.domain.ApiBoard;
+import wordfeudapi.domain.ApiTile;
 import wordfeudapi.domain.TileMove;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,6 +115,46 @@ public class MoveFinderTest {
 
         assertThat(sorted.get(sorted.size()-1).getWord(), is("DULeRES"));
         assertThat(sorted.get(sorted.size()-1).getPoints(), is(67));
+    }
+
+    @Test
+    public void comparison() {
+        char[][] charBoard = {
+                {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', 'G', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', 'R', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', 'G', 'J', 'O', 'R', 'S', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', 'W', '-', 'L', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', 'L', '-', 'U', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', 'F', 'Y', 'R', 'T', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', 'F', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'},
+                {'-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'}};
+
+        ArrayList<MoveDO> allMovesGammel = moveFinder.findAllMoves(new BoardDO(charBoard), "DNSPRIA");
+        List<String> gammelWords = allMovesGammel.stream().map(move -> move.word).collect(Collectors.toList());
+
+        ApiBoard emptyApiBoard = new ApiBoard(new int[15][15]);
+        ArrayList<ApiTile> apiTiles = new ArrayList<>();
+        for (int x = 0; x < 15; x++) {
+            for (int y = 0; y < 15; y++) {
+                if (charBoard[x][y] != '-') {
+                    apiTiles.add(new ApiTile(x, y, charBoard[x][y], false));
+                }
+            }
+        }
+        ApiTile[] apiTilesArray = Arrays.stream(apiTiles.toArray()).toArray(ApiTile[]::new);
+
+        Board boardWithTiles = new Board(emptyApiBoard, apiTilesArray);
+
+        List<String> nyeMoves = WordfeudTestKt.findAllMoves(boardWithTiles, "DNSPRIA");
+
+        System.out.println();
     }
 
     private static ApiBoard getStandardBoard() {

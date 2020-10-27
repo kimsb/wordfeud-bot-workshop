@@ -86,9 +86,12 @@ class Bot {
 
         //nytt
         Board board = new Board(apiBoard, apiTiles);
-        WordfeudTestKt.findAllMoves(board, apiRack.toString());
+        List<String> nyeMoves = WordfeudTestKt.findAllMoves(board, new String(apiRack.chars()));
 
         ArrayList<MoveDO> allMoves = new MoveFinder(apiBoard).findAllMoves(new BoardDO(apiTiles), new String(apiRack.chars()));
+
+        System.out.println("NY: " + nyeMoves.size());
+        System.out.println("GAMMEL: " + allMoves.size());
 
         return allMoves.stream()
                 .map(MoveDO::toTileMove)
