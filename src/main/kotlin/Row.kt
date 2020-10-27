@@ -29,7 +29,7 @@ data class Row(
     fun crossChecks(): List<Square> {
         return squares.mapIndexed { index, square ->
             var bitSet = BitSet(26)
-            var crossSum = 0
+            var crossSum: Int? = null
             if (!square.isOccupied()) {
                 val prefix = getPrefix(index)
                 val suffix = getSuffix(index)
@@ -38,7 +38,7 @@ data class Row(
                     bitSet.flip(0, 26)
                 } else {
                     bitSet = validCrossCheckLetters(prefix, suffix)
-                    crossSum = (prefix + suffix).map(ScoreConstants::letterScore).sum()
+                    crossSum = if ((prefix + suffix).isEmpty()) null else (prefix + suffix).map(ScoreConstants::letterScore).sum()
                 }
             }
             square.copy(crossChecks = bitSet,
@@ -50,10 +50,7 @@ data class Row(
     fun findAcrossMoves(rack: Rack): List<RowMove> {
         squares.forEachIndexed { index, square ->
             if (square.isAnchor) {
-
-                println("ANCHOR-INDEX: $index")
                 currentAnchor = index //TODO må jeg gjøre dette?
-
                 val prefix = getPrefix(index)
                 if (prefix.isNotEmpty()) {
                     extendRight(prefix, getSourceNode().transition(prefix), index, rack)
@@ -84,7 +81,7 @@ data class Row(
                 addedLetters++
                 wordMultiplier *= square.wordMultiplier
                 val squareScore = letterScore(word[index]) * square.letterMultiplier
-                if (square.crossSum > 0) {
+                if (square.crossSum != null) {
                     crossSums += (squareScore + square.crossSum) * square.wordMultiplier
                 }
                 squareScore
@@ -148,8 +145,6 @@ else
         val square = squares.getOrElse(index) { Square() }
         if (!square.isOccupied()) {
             if (index != currentAnchor && node.isAcceptNode) { //TODO må ha brukt brikker! //TODO kan ikke være anchor, sant?
-                //TODO legal move
-                println("$partialWord - index: $index, leftOnRack: ${rack.tiles.joinToString()}")
                 rowMoves.add(RowMove(partialWord,
                     index - partialWord.length,
                     calculateScore(partialWord, index - partialWord.length)))

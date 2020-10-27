@@ -239,7 +239,7 @@ public class MDAGNode
      */
     public boolean hasOutgoingTransition(char letter)
     {
-        return outgoingTransitionTreeMap.containsKey(letter);
+        return outgoingTransitionTreeMap.containsKey(Character.toUpperCase(letter));
     }
     
     
@@ -265,7 +265,7 @@ public class MDAGNode
      */
     public MDAGNode transition(char letter)
     {
-        return outgoingTransitionTreeMap.get(letter);
+        return outgoingTransitionTreeMap.get(Character.toUpperCase(letter));
     }
     
     
@@ -279,6 +279,7 @@ public class MDAGNode
      */
     public MDAGNode transition(String str)
     {
+        str = str.toUpperCase();
         int charCount = str.length();
         MDAGNode currentNode = this;
         

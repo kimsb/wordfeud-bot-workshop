@@ -6,6 +6,7 @@ import wordfeudapi.domain.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -102,8 +103,11 @@ class Bot {
                 .sorted(Comparator.comparingInt(TileMove::getPoints))
                 .collect(Collectors.toList());
 
-        System.out.println("NY: " + nyeMoves.size());
-        System.out.println("GAMMEL: " + allMoves.size());
+        Set<String> nySet = nyCollect.stream().map(TileMove::getWord).collect(Collectors.toSet());
+        List<TileMove> manglerINy = gammelCollect.stream().filter(tileMove -> !nySet.contains(tileMove.getWord())).collect(Collectors.toList());
+
+        System.out.println("NY-score: " + nyeMoves.stream().map(TileMove::getPoints).reduce(0, Integer::sum));
+        System.out.println("GAMMEL-score: " + allMoves.stream().map(moveDO -> moveDO.moveScore).reduce(0, Integer::sum));
 
         return gammelCollect;
     }

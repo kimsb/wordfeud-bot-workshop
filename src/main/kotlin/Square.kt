@@ -5,7 +5,7 @@ data class Square(
     val tile: Tile? = null,
     val crossChecks: BitSet = BitSet(26),
     val isAnchor: Boolean = false,
-    val crossSum: Int = 0,
+    val crossSum: Int? = null,
     val letterMultiplier: Int = 1,
     val wordMultiplier: Int = 1
 ) {
@@ -13,9 +13,8 @@ data class Square(
         return tile != null
     }
 
-    //TODO burde denne returnere stor bokstav også for blank?
     fun getLetter(): Char? {
-        return tile?.letter?.toUpperCase()
+        return tile?.letter
     }
 
     fun crossChecksContains(letter: Char): Boolean {
