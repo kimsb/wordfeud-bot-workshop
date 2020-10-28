@@ -354,3 +354,16 @@ private fun calculateScore(word: String, startIndex: Int): Int {
   ```
   
 </details>
+
+
+## Strategi
+
+WOW! 🔥
+Nå har vi en bot som ALLTID finner det høyeste scorende legget!
+Det må jo bli suksess, eller? I de fleste tilfeller vil en slik strategi være nok til å gjøre det veldig bra, men det finnes fortsatt forbedringspotensiale!
+Her er noen få tips til forbedringer:
+- Bytting av brikker: når bør man bytte og hvilke brikker bør man bytte? Nå bytter boten bare hvis den ikke finner et eneste gyldig legg.
+- Spare fine brikker: noen ganger er det lønnsomt å kvitte seg med dårlige brikker, selv om man får litt mindre poeng.
+- Bare bruke blank brikke når man får godt betalt for det
+- Ikke åpne for mye: det hjelper ikke å få noen få ekstra poeng om man samtidig serverer motstanderen mye mer
+- Sluttspill: mot slutten av spillet vet man hvilke brikker motstanderen sitter igjen med. Kanskje kan man blokke, slik at motstanderen ikke kan bli kvitt sine brikker?
