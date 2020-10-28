@@ -76,7 +76,7 @@ class Board(squares: List<List<Square>>) {
     }
 
     private fun toMove(rowMove: RowMove, rowIndex: Int, horizontal: Boolean): Move {
-        val addedTiles = (rowMove.word.indices).filterIndexed { index, i ->
+        val addedTiles = (rowMove.word.indices).filterIndexed { index, _ ->
             if (horizontal) {
                 !squares[rowIndex][rowMove.startIndex + index].isOccupied()
             } else {

@@ -14,15 +14,6 @@ class BoardTest {
     inner class AnchorTest {
 
         @Test
-        fun emptyBoard() {
-            val emptyApiBoard = ApiBoard(Array(15) { IntArray(15) })
-            val emptyBoard = Board(emptyApiBoard, emptyArray())
-
-            assertThat(emptyBoard.squares[7][7].isAnchor).`as`("Midterste square skal være anchor på tomt brett").isTrue
-            assertThat(emptyBoard.squares.flatten().count { it.isAnchor }).`as`("Tomt brett skal bare ha én anchor").isEqualTo(1)
-        }
-
-        @Test
         fun boardWithTiles() {
             val emptyApiBoard = ApiBoard(Array(15) { IntArray(15) })
             val apiTiles = arrayOf(
@@ -38,6 +29,15 @@ class BoardTest {
             assertThat(boardWithTiles.squares[8][6].isAnchor).`as`("squares[8][6] skulle vært anchor").isTrue
             assertThat(boardWithTiles.squares[8][7].isAnchor).`as`("squares[8][7] skulle vært anchor").isTrue
             assertThat(boardWithTiles.squares.flatten().count { it.isAnchor }).`as`("brettet skal ha 6 anchors").isEqualTo(6)
+        }
+
+        @Test
+        fun emptyBoard() {
+            val emptyApiBoard = ApiBoard(Array(15) { IntArray(15) })
+            val emptyBoard = Board(emptyApiBoard, emptyArray())
+
+            assertThat(emptyBoard.squares[7][7].isAnchor).`as`("Midterste square skal være anchor på tomt brett").isTrue
+            assertThat(emptyBoard.squares.flatten().count { it.isAnchor }).`as`("Tomt brett skal bare ha én anchor").isEqualTo(1)
         }
 
     }
