@@ -7,8 +7,16 @@ class Board(squares: List<List<Square>>) {
     val squares: List<List<Square>>
 
     init {
-        //TODO Anchors
-        this.squares = squares
+        this.squares = squares.mapIndexed { i, row ->
+            row.mapIndexed { j, square ->
+                square.copy(isAnchor = !squares[i][j].isOccupied() &&
+                    ((i == 7 && j == 7) ||
+                        squares.getOrNull(i - 1)?.get(j)?.isOccupied() == true ||
+                        squares[i].getOrNull(j - 1)?.isOccupied() == true ||
+                        squares[i].getOrNull(j + 1)?.isOccupied() == true ||
+                        squares.getOrNull(i + 1)?.get(j)?.isOccupied() == true))
+            }
+        }
     }
 
     constructor(apiBoard: ApiBoard, apiTiles: Array<ApiTile>) : this(
