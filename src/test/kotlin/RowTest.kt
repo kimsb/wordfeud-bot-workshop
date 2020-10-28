@@ -5,10 +5,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.*
 
-class WordfeudTestKtTest {
+class RowTest {
 
     @Test
-    fun testCrossChecks() {
+    fun `Cross Checks`() {
 
         val squares = createTestRow().crossChecks()
 
@@ -33,29 +33,6 @@ class WordfeudTestKtTest {
         ae.flip(4)
         assertThat(squares[14].crossChecks).`as`("Her skulle bit a og e (index 0 og 4) vært satt").isEqualTo(ae)
     }
-
-    /*@Test
-    fun testCrossAnchors() {
-        Dictionary.initialize()
-
-        val squares = crossChecksForRow(createTestRow())
-
-        assertThat(squares[0].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[1].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[2].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[3].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[4].crossAnchor).`as`("Her skulle crossAnchor vært true").isTrue
-        assertThat(squares[5].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[6].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[7].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[8].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[9].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[10].crossAnchor).`as`("Her skulle crossAnchor vært true").isTrue
-        assertThat(squares[11].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[12].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[13].crossAnchor).`as`("Her skulle crossAnchor vært false").isFalse
-        assertThat(squares[14].crossAnchor).`as`("Her skulle crossAnchor vært true").isTrue
-    }*/
 
     @Test
     fun testCrossSums() {

@@ -7,18 +7,8 @@ class Board(squares: List<List<Square>>) {
     val squares: List<List<Square>>
 
     init {
-        this.squares = squares.mapIndexed { i, row ->
-            row.mapIndexed { j, square ->
-                val isAnchor =
-                    !squares[i][j].isOccupied() &&
-                        ((i == 7 && j == 7) ||
-                            squares.getOrNull(i - 1)?.get(j)?.isOccupied() == true ||
-                            squares[i].getOrNull(j - 1)?.isOccupied() == true ||
-                            squares[i].getOrNull(j + 1)?.isOccupied() == true ||
-                            squares.getOrNull(i + 1)?.get(j)?.isOccupied() == true)
-                square.copy(isAnchor = isAnchor)
-            }
-        }
+        //TODO Anchors
+        this.squares = squares
     }
 
     constructor(apiBoard: ApiBoard, apiTiles: Array<ApiTile>) : this(
