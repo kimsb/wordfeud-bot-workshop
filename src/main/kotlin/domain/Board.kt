@@ -33,6 +33,20 @@ class Board(squares: List<List<Square>>) {
         }
     )
 
+    fun findAllMoves(rack: Rack): List<Move> {
+        val rowMoves = getRowsWithCrossChecks().flatMapIndexed { index, it ->
+            it.findAcrossMoves(rack).map {
+                toMove(it, index, true)
+            }
+        }
+        val columnMoves = getTransposedRowsWithCrossChecks().flatMapIndexed { index, it ->
+            it.findAcrossMoves(rack).map {
+                toMove(it, index, false)
+            }
+        }
+        return rowMoves + columnMoves
+    }
+
     private fun getRowsWithCrossChecks(): List<Row> {
         return Board(getTransposedRows().map(Row::crossChecks)).getTransposedRows()
     }
@@ -41,7 +55,7 @@ class Board(squares: List<List<Square>>) {
         return Board(getRows().map(Row::crossChecks)).getTransposedRows()
     }
 
-    fun transpose(): Board {
+    private fun transpose(): Board {
         return Board(squares.indices.map { row ->
             squares.indices.map { column ->
                 squares[column][row]
@@ -59,20 +73,6 @@ class Board(squares: List<List<Square>>) {
         return transpose().squares.map {
             Row(it)
         }
-    }
-
-    fun findAllMoves(rack: Rack): List<Move> {
-        val rowMoves = getRowsWithCrossChecks().flatMapIndexed { index, it ->
-            it.findAcrossMoves(rack).map {
-                toMove(it, index, true)
-            }
-        }
-        val columnMoves = getTransposedRowsWithCrossChecks().flatMapIndexed { index, it ->
-            it.findAcrossMoves(rack).map {
-                toMove(it, index, false)
-            }
-        }
-        return rowMoves + columnMoves
     }
 
     private fun toMove(rowMove: RowMove, rowIndex: Int, horizontal: Boolean): Move {

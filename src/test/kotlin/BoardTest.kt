@@ -50,21 +50,6 @@ class BoardTest {
 
         assertThat(aRemoved.tiles).isEqualTo("BCDEFA".toList())
     }
-
-    @Test
-    fun transpose() {
-        val emptyApiBoard = ApiBoard(Array(15) { IntArray(15) })
-        val apiTiles = arrayOf(
-            ApiTile(6, 7, 'Y', false),
-            ApiTile(7, 7, 'O', false)
-        )
-        val boardWithTiles = Board(emptyApiBoard, apiTiles)
-
-        val transposed = boardWithTiles.transpose()
-
-        assertThat(transposed.squares[6][7].getLetter()).isEqualTo('Y')
-        assertThat(transposed.squares[7][7].getLetter()).isEqualTo('O')
-    }
 }
 
 //GAMLE TESTER:
