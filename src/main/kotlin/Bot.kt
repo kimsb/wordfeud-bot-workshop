@@ -7,9 +7,11 @@ import java.lang.Thread.sleep
 
 class Bot {
     private val wfClient: RestWordFeudClient = RestWordFeudClient()
+    private val botName = "<dittnavn>bot"
 
     init {
-        wfClient.logon("moominbottest", "moominbottest")
+        wfClient.logon(botName, botName)
+        println("Logged in as $botName")
         botLoop()
     }
 

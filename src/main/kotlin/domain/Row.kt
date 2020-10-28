@@ -1,12 +1,7 @@
 package domain
 
-import Constants
-import Constants.VALID_LETTERS
-import Constants.letterScore
-import Dictionary.contains
 import Dictionary.getSourceNode
 import mdag.MDAGNode
-import java.util.*
 
 data class Row(
     val squares: List<Square>
@@ -24,7 +19,7 @@ data class Row(
                     val limit = (0 until index).find {
                         squares[index - 1 - it].isAnchor
                     } ?: index
-                    leftPart(prefix, getSourceNode(), limit, index, rack)
+                    leftPart("", getSourceNode(), limit, index, rack)
                 }
             }
         }
@@ -32,24 +27,10 @@ data class Row(
     }
 
     fun crossChecks(): List<Square> {
-        return squares.mapIndexed { index, square ->
-            var bitSet = BitSet(26)
-            var crossSum: Int? = null
-            if (!square.isOccupied()) {
-                val prefix = getPrefix(index)
-                val suffix = getSuffix(index)
-
-                if (prefix.isEmpty() && suffix.isEmpty()) {
-                    bitSet.flip(0, 26)
-                } else {
-                    bitSet = validCrossCheckLetters(prefix, suffix)
-                    crossSum = if ((prefix + suffix).isEmpty()) null else (prefix + suffix).map(Constants::letterScore).sum()
-                }
-            }
-            square.copy(crossChecks = bitSet,
-                crossSum = crossSum)
-        }
+        //TODO Cross-checks
+        return squares
     }
+
 
     private fun getPrefix(startIndex: Int): String {
         val builder = StringBuilder()
@@ -69,31 +50,9 @@ data class Row(
         return builder.toString()
     }
 
-    private fun validCrossCheckLetters(prefix: String, suffix: String): BitSet {
-        val bitset = BitSet(26)
-        VALID_LETTERS.forEachIndexed { index, char ->
-            bitset.set(index, contains(prefix + char + suffix))
-        }
-        return bitset
-    }
-
     private fun calculateScore(word: String, startIndex: Int): Int {
-        var wordMultiplier = 1
-        var crossSums = 0
-        var addedLetters = 0
-        return squares.subList(startIndex, startIndex + word.length).mapIndexed { index, square ->
-            if (square.isOccupied()) {
-                letterScore(square.getLetter()!!)
-            } else {
-                addedLetters++
-                wordMultiplier *= square.wordMultiplier
-                val squareScore = letterScore(word[index]) * square.letterMultiplier
-                if (square.crossSum != null) {
-                    crossSums += (squareScore + square.crossSum) * square.wordMultiplier
-                }
-                squareScore
-            }
-        }.sum() * wordMultiplier + crossSums + (if (addedLetters == 7) 40 else 0)
+        //TODO calculateScore
+        return 0
     }
 
     private fun leftPart(
@@ -103,17 +62,7 @@ data class Row(
         anchorIndex: Int,
         rack: Rack
     ) {
-        extendRight(partialWord, node, anchorIndex, anchorIndex, rack)
-        if (limit > 0) {
-            node.outgoingTransitions.entries.forEach {
-                if (rack.contains(it.key)) {
-                    leftPart(partialWord + it.key, it.value, limit - 1, anchorIndex, rack.without(it.key))
-                }
-                if (rack.contains('*')) {
-                    leftPart(partialWord + it.key.toLowerCase(), it.value, limit - 1, anchorIndex, rack.without('*'))
-                }
-            }
-        }
+        //TODO leftPart
     }
 
     private fun extendRight(
@@ -123,28 +72,7 @@ data class Row(
         index: Int,
         rack: Rack
     ) {
-        val square = squares.getOrElse(index) { Square() }
-        if (!square.isOccupied()) {
-            if (index != anchorIndex && node.isAcceptNode) {
-                rowMoves.add(RowMove(partialWord,
-                    index - partialWord.length,
-                    calculateScore(partialWord, index - partialWord.length)))
-            }
-            node.outgoingTransitions.entries.forEach {
-                if (rack.contains(it.key) && square.crossChecksContains(it.key)) {
-                    extendRight(partialWord + it.key, it.value, anchorIndex, index + 1, rack.without(it.key))
-                }
-                if (rack.contains('*') && square.crossChecksContains(it.key)) {
-                    extendRight(partialWord + it.key.toLowerCase(), it.value, anchorIndex, index + 1, rack.without('*'))
-                }
-            }
-        } else {
-            square.getLetter()?.let {
-                if (node.hasOutgoingTransition(it)) {
-                    extendRight(partialWord + it, node.transition(it), anchorIndex, index + 1, rack)
-                }
-            }
-        }
+        //TODO extendRight
     }
 
 }
