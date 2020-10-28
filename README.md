@@ -287,7 +287,7 @@ private fun extendRight(
 
 ## Poeng
 
-For hvert horisontale legg må vi telle poeng for ordene som blir laget vertikalt også. Første steg for å regne ut poengsummen for hvert legg blir derfor å regne ut `crossSum` for hver `Square`. `crossSum` er poengsummen til alle bokstavene som allerede ligger på brettet over og under et gitt felt, og som vil bli til et vertikalt ord. `crossSum` kan vi finne ved å legge til noen linjer i funksjonen `crossChecks()` som vi implementerte tidligere.
+For hvert horisontale legg må vi telle poeng for ordene som blir laget vertikalt også. Første steg for å regne ut poengsummen for hvert legg blir derfor å regne ut `crossSum` for hver `Square`. Poengene til en bokstav kan vi finne ved å bruke funskjonen `letterScore()` i `Constants`. `crossSum` er poengsummen til alle bokstavene som allerede ligger på brettet over og under et gitt felt, og som vil bli til et vertikalt ord. `crossSum` kan vi finne ved å legge til noen linjer i funksjonen `crossChecks()` som vi implementerte tidligere.
 `crossSum` skal settes til summen av alle bokstavene i `prefix` og `suffix`, eller `null` dersom feltet allerede er opptatt eller hvis feltet hverken har `prefix` eller `suffix`.
 
 For å teste koden kan vi kjøre testene `Cross sums` i `RowTest`. (Testene blir ikke kjørt ved bygg)
