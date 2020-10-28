@@ -20,7 +20,7 @@ Dersom det ikke er noen brikker på brettet, skal det midterste feltet `squares[
 For å teste koden kan vi kjøre `Anchors`-testene i `BoardTest`. (Testene blir ikke kjørt ved bygg.)
 
 <details>
-  <summary>Eksempel på implementasjon av `init`</summary>
+  <summary>Eksempel på implementasjon av init</summary>
     
   ```kotlin
 init {
@@ -53,7 +53,7 @@ For å sjekke om et ord er gyldig, brukes `Dictionary.contains()`
 For å teste koden kan vi kjøre `Cross-checks`-testen i `RowTest`. (Testen blir ikke kjørt ved bygg.)
 
 <details>
-  <summary>Eksempel på implementasjon av `crossChecks()`</summary>
+  <summary>Eksempel på implementasjon av crossChecks()</summary>
     
   ```kotlin
 fun crossChecks(): List<Square> {
@@ -106,7 +106,7 @@ I koden vår sender vi også med `anchorIndex` som lar hos holde styr på hvilke
 Siden `Rack` er immutable, trenger vi ikke fjerne/legge tilbake brikker på racket, men vi kan bruke `Rack` sin funksjon `without()` som returnerer et nytt `Rack` uten brikken som vi ønsker å fjerne, når vi kaller på neste `leftPart()`. Vi kan bruke `outgoingTransitions` for å finne edges ut av en `MDAGNode`.
 
 <details>
-  <summary>Eksempel på implementasjon av `leftPart()`</summary>
+  <summary>Eksempel på implementasjon av leftPart()</summary>
     
   ```kotlin
 private fun leftPart(
@@ -168,7 +168,7 @@ val square = squares.getOrElse(index) { Square() }
 For å teste koden kan vi kjøre testen `Find all words` i `BoardTest`. (Testen blir ikke kjørt ved bygg)
 
 <details>
-  <summary>Eksempel på implementasjon av `extendRight()`</summary>
+  <summary>Eksempel på implementasjon av extendRight()</summary>
     
   ```kotlin
 private fun extendRight(
@@ -219,7 +219,7 @@ For å teste koden kan vi kjøre testen `Find all words with blank` i `BoardTest
 Strålende! Nå finner vi ALLE mulige legg! Men det hadde vært fint å vite hvor mange poeng hvert legg gir...
 
 <details>
-  <summary>Eksempel på implementasjon av `leftPart() med støtte for blank brikke`</summary>
+  <summary>Eksempel på implementasjon av leftPart() med støtte for blank brikke</summary>
     
   ```kotlin
 private fun leftPart(
@@ -246,7 +246,7 @@ private fun leftPart(
 </details>
 
 <details>
-  <summary>Eksempel på implementasjon av `extendRight() med støtte for blank brikke`</summary>
+  <summary>Eksempel på implementasjon av extendRight() med støtte for blank brikke</summary>
     
   ```kotlin
 private fun extendRight(
@@ -291,7 +291,7 @@ For hvert horisontale legg må vi telle poeng for ordene som blir laget vertikal
 For å teste koden kan vi kjøre testene `Cross sums` i `RowTest`. (Testene blir ikke kjørt ved bygg)
 
 <details>
-  <summary>Eksempel på implementasjon av `crossChecks()` med `crossSum`</summary>
+  <summary>Eksempel på implementasjon av crossChecks() med crossSum</summary>
     
   ```kotlin
 fun crossChecks(): List<Square> {
@@ -330,7 +330,7 @@ Dersom alle 7 brikkene fra racket blir brukt (dette kalles en `bingo`), skal vi 
 For å teste koden kan vi kjøre testene `Calculate score` i `BoardTest`. (Testene blir ikke kjørt ved bygg)
 
 <details>
-  <summary>Eksempel på implementasjon av `calculateScore()`</summary>
+  <summary>Eksempel på implementasjon av calculateScore()</summary>
     
   ```kotlin
 private fun calculateScore(word: String, startIndex: Int): Int {
