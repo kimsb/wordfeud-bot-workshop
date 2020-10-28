@@ -154,10 +154,11 @@ else
         ExtendRight(PartialWord + L, N', next-square)
 ```
 
-Vi kan bruke `isAcceptNode` for å finne ut om en `MDAGNode` er en "terminal node".
+Vi kan bruke `isAcceptNode` for å finne ut om en `MDAGNode` er en `terminal node`.
+
 I koden vår tilsvarer `LegalMove(PartialWord)` å legge til en ny `RowMove` i listen `rowMoves`
 
-For å få med seg siste felt på hver rad kan det være lurt å legge til et tomt felt på enden av hver rad, ved f.eks å gjøre noe sånt som dette
+For å få sjekket for `terminal node` også på siste felt kan det være lurt å legge til et tomt felt på enden av hver rad, ved f.eks å gjøre noe sånt som dette
 ```kotlin
 val square = squares.getOrElse(index) { Square() }
 ```
