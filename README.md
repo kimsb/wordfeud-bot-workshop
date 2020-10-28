@@ -165,6 +165,8 @@ For å få sjekket for `terminal node` også på siste felt kan det være lurt �
 val square = squares.getOrElse(index) { Square() }
 ```
 
+For å finne ut om en bokstav er en del av `crossChecks` kan vi bruke `Square` sin `crossChecksContains()`
+
 For å teste koden kan vi kjøre testen `Find all words` i `BoardTest`. (Testen blir ikke kjørt ved bygg)
 
 <details>
