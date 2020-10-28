@@ -214,7 +214,9 @@ Det fikser vi ved å legge til litt ekstra logikk i både `leftPart()` og `exten
 Etter vi har sjekket om racket vårt inneholder en gitt bokstav, sjekker vi også om racket inneholder en blank brikke (representert av `'*'`)
 Dersom vi har en blank brikke bruker vi den som bokstaven vi har sjekket for (f.eks P), men vi setter den da til `lowerCase` for å differensiere bruk av blank brikke med bruk av vanlig bokstav.
 
-For å teste koden din kan vi kjøre testen `Find all words with blank` i `BoardTest`. (Testen blir ikke kjørt ved bygg)
+For å teste koden kan vi kjøre testen `Find all words with blank` i `BoardTest`. (Testen blir ikke kjørt ved bygg)
+
+Strålende! Nå finner vi ALLE mulige legg! Men det hadde vært fint å vite hvor mange poeng hvert legg gir...
 
 <details>
   <summary>Eksempel på implementasjon av `leftPart() med støtte for blank brikke`</summary>
@@ -283,4 +285,72 @@ private fun extendRight(
 
 ## Poeng
 
-//TODO CROSSUMS I CROSSCHECKS
+For hvert horisontale legg må vi telle poeng for ordene som blir laget vertikalt også. Første steg for å regne ut poengsummen for hvert legg blir derfor å regne ut `crossSum` for hver `Square`. `crossSum` er poengsummen til alle bokstavene som allerede ligger på brettet over og under et gitt felt, og som vil bli til et vertikalt ord. `crossSum` kan vi finne ved å legge til noen linjer i funksjonen `crossChecks()` som vi implementerte tidligere.
+`crossSum` skal settes til summen av alle bokstavene i `prefix` og `suffix`, eller `null` dersom feltet allerede er opptatt eller hvis feltet hverken har `prefix` eller `suffix`.
+
+For å teste koden kan vi kjøre testene `Cross sums` i `RowTest`. (Testene blir ikke kjørt ved bygg)
+
+<details>
+  <summary>Eksempel på implementasjon av `crossChecks()` med `crossSum`</summary>
+    
+  ```kotlin
+fun crossChecks(): List<Square> {
+        return squares.mapIndexed { squareIndex, square ->
+            val bitSet = BitSet(26)
+            var crossSum: Int? = null
+            if (!square.isOccupied()) {
+                val prefix = getPrefix(squareIndex)
+                val suffix = getSuffix(squareIndex)
+                if (prefix.isEmpty() && suffix.isEmpty()) {
+                    bitSet.flip(0, 26)
+                } else {
+                    VALID_LETTERS.forEachIndexed { bitSetIndex, letter ->
+                        bitSet.set(bitSetIndex, contains(prefix + letter + suffix))
+                    }
+                    crossSum = if ((prefix + suffix).isEmpty()) null else (prefix + suffix).map(Constants::letterScore).sum()
+                }
+            }
+            square.copy(crossChecks = bitSet, crossSum = crossSum)
+        }
+    }
+  ```
+  
+</details>
+
+YES! Da gjenstår det å regne ut poengsummen for hele legget, det gjør vi i funksjonen `calculateScore()` i `Row`. For hvert felt som er en del av det nye, vertikale legget gjelder:
+- dersom feltet allerede har en brikke, ta med poengsummen til den brikken i den vertikale summen
+- dersom en brikke fra racket blir brukt, ta med poengsummen til den brikken + evt `letterMultiplier`/`wordMultiplier` i både vertikal og horisontal sum
+
+`letterMultiplier` gjelder for én brikke, dvs dersom du legger en B (som gir 4 poeng) på et felt med `letterMultiplier` = 2, så skal brikken gi 8 poeng (i begge retninger).
+
+`wordMultiplier` gjelder for hele ordet (i begge retninger), dvs dersom du legger BÆ (som gir 4 + 8 = 12 poeng) over et felt med `wordMultiplier` = 2, så skal ordet gi 24 poeng.
+
+Dersom alle 7 brikkene fra racket blir brukt (dette kalles en `bingo`), skal vi gi 40 poeng ekstra
+
+For å teste koden kan vi kjøre testene `Calculate score` i `BoardTest`. (Testene blir ikke kjørt ved bygg)
+
+<details>
+  <summary>Eksempel på implementasjon av `calculateScore()`</summary>
+    
+  ```kotlin
+private fun calculateScore(word: String, startIndex: Int): Int {
+        var wordMultiplier = 1
+        var crossSums = 0
+        var addedLetters = 0
+        return squares.subList(startIndex, startIndex + word.length).mapIndexed { index, square ->
+            if (square.isOccupied()) {
+                letterScore(square.getLetter()!!)
+            } else {
+                addedLetters++
+                wordMultiplier *= square.wordMultiplier
+                val squareScore = letterScore(word[index]) * square.letterMultiplier
+                if (square.crossSum != null) {
+                    crossSums += (squareScore + square.crossSum) * square.wordMultiplier
+                }
+                squareScore
+            }
+        }.sum() * wordMultiplier + crossSums + (if (addedLetters == 7) 40 else 0)
+    }
+  ```
+  
+</details>
