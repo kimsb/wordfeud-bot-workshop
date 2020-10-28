@@ -17,7 +17,7 @@ Det første vi skal gjøre er å finne ut hvilke felter som er såkalte `anchors
 I `Board`-klassen sin konstruktør blir brettet fylt med brikkene fra Wordfeud-apiet. Gå til `Board` sin `init` og sett riktig `isAnchor` for hver `Square`.
 Dersom det ikke er noen brikker på brettet, skal det midterste feltet `squares[7][7]` være `anchor`
 
-For å teste koden din kan du kjøre `Anchors`-testene i `BoardTest`. (Testene blir ikke kjørt ved bygg.)
+For å teste koden kan vi kjøre `Anchors`-testene i `BoardTest`. (Testene blir ikke kjørt ved bygg.)
 
 <details>
   <summary>Eksempel på implementasjon av `init`</summary>
@@ -50,7 +50,7 @@ For hver `Square` finnes det tre alternativer:
 
 For å sjekke om et ord er gyldig, brukes `Dictionary.contains()`
 
-For å teste koden din kan du kjøre `Cross-checks`-testen i `RowTest`. (Testen blir ikke kjørt ved bygg.)
+For å teste koden kan vi kjøre `Cross-checks`-testen i `RowTest`. (Testen blir ikke kjørt ved bygg.)
 
 <details>
   <summary>Eksempel på implementasjon av `crossChecks()`</summary>
@@ -165,6 +165,8 @@ For å få sjekket for `terminal node` også på siste felt kan det være lurt �
 val square = squares.getOrElse(index) { Square() }
 ```
 
+For å teste koden kan vi kjøre testen `Find all words` i `BoardTest`. (Testen blir ikke kjørt ved bygg)
+
 <details>
   <summary>Eksempel på implementasjon av `extendRight()`</summary>
     
@@ -200,7 +202,84 @@ private fun extendRight(
   
 </details>
 
-## Blanke
+**WOHOO!**
+Nå har du faktisk en bot som kjører!
+Meeen den har fortsatt en del forbedringspotensiale...
+Den klarer ikke bruke blanke brikker (som er de beste brikkene) og den vet ikke hvor mange poeng hvert legg gir, så den legger bare det første ordet den finner...
+
+## Blanke brikker
+
+For å finne absolutt alle mulige legg, må boten lære seg å bruke blanke brikker.
+Det fikser vi ved å legge til litt ekstra logikk i både `leftPart()` og `extendRight()`.
+Etter vi har sjekket om racket vårt inneholder en gitt bokstav, sjekker vi også om racket inneholder en blank brikke (representert av `'*'`)
+Dersom vi har en blank brikke bruker vi den som bokstaven vi har sjekket for (f.eks P), men vi setter den da til `lowerCase` for å differensiere bruk av blank brikke med bruk av vanlig bokstav.
+
+For å teste koden din kan vi kjøre testen `Find all words with blank` i `BoardTest`. (Testen blir ikke kjørt ved bygg)
+
+<details>
+  <summary>Eksempel på implementasjon av `leftPart() med støtte for blank brikke`</summary>
+    
+  ```kotlin
+private fun leftPart(
+        partialWord: String,
+        node: MDAGNode,
+        limit: Int,
+        anchorIndex: Int,
+        rack: Rack
+    ) {
+        extendRight(partialWord, node, anchorIndex, anchorIndex, rack)
+        if (limit > 0) {
+            node.outgoingTransitions.entries.forEach {
+                if (rack.contains(it.key)) {
+                    leftPart(partialWord + it.key, it.value, limit - 1, anchorIndex, rack.without(it.key))
+                }
+                if (rack.contains('*')) {
+                    leftPart(partialWord + it.key.toLowerCase(), it.value, limit - 1, anchorIndex, rack.without('*'))
+                }
+            }
+        }
+    }
+  ```
+  
+</details>
+
+<details>
+  <summary>Eksempel på implementasjon av `extendRight() med støtte for blank brikke`</summary>
+    
+  ```kotlin
+private fun extendRight(
+        partialWord: String,
+        node: MDAGNode,
+        anchorIndex: Int,
+        index: Int,
+        rack: Rack
+    ) {
+        val square = squares.getOrElse(index) { Square() }
+        if (!square.isOccupied()) {
+            if (index != anchorIndex && node.isAcceptNode) {
+                rowMoves.add(RowMove(partialWord,
+                    index - partialWord.length,
+                    calculateScore(partialWord, index - partialWord.length)))
+            }
+            node.outgoingTransitions.entries.forEach {
+                if (rack.contains(it.key) && square.crossChecksContains(it.key)) {
+                    extendRight(partialWord + it.key, it.value, anchorIndex, index + 1, rack.without(it.key))
+                }
+                if (rack.contains('*') && square.crossChecksContains(it.key)) {
+                    extendRight(partialWord + it.key.toLowerCase(), it.value, anchorIndex, index + 1, rack.without('*'))
+                }
+            }
+        } else {
+            square.getLetter()?.let {
+                if (node.hasOutgoingTransition(it)) {
+                    extendRight(partialWord + it, node.transition(it), anchorIndex, index + 1, rack)
+                }
+            }
+        }
+    }
+  ```
+  
+</details>
 
 ## Poeng
 
