@@ -6,6 +6,8 @@ Algoritmen som vi skal implementere ble beskrevet i artikkelen [The World’s Fa
 
 Det er en ganske snedig algoritme som finner alle gyldige legg. Med noen enkle steg reduseres problemet vårt til én dimensjon, slik at vi bare trenger å finne alle gyldige legg for én enkelt rad om gangen. I Wordfeud kan man enten legge brikker horisontalt eller vertikalt, men dersom man tenker på et vertikalt legg som et horisontalt legg på et transponert brett, trenger vi bare å implementere algoritmen for å finne alle gyldige horisontale legg.
 
+**Før kodingen starter kan du gå til fila `Bot` og sette variabelen `botName` til navnet på boten din (jeg har allerede opprettet Wordfeud-brukere til alle på formatet `<navn>bot` (uten ÆØÅ), dvs at f.eks Jørgen har en bruker som heter `jorgenbot`). Prøv å bygge og kjøre prosjektet for å se at innlogging funker!**
+
 ## Anchors
 
 Det første vi skal gjøre er å finne ut hvilke felter som er såkalte `anchors`, dvs hvilke felter som kan være utgangspunkt for neste legg. Ethvert legg i Wordfeud må bygge videre på brikkene som allerede ligger på brettet, så et felt er klassifisert som `anchor` dersom
