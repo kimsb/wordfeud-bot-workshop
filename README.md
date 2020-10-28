@@ -86,7 +86,7 @@ Dersom den venstre delen av ordet kommer fra brettet, kan vi bare bruke `getPref
 
 Her skal vi implementere funksjonen `leftPart()` i klassen `Row`. Den finner alle gyldige `left parts` og kaller så på funskjonen `extendRight()` (som vi skal implementere etterpå) for hver `left part` den finner.
 
-Her er pseudokode av funskjonen, som beskrevet i artikkelen [The World’s Fastest Scrabble Program](https://www.cs.cmu.edu/afs/cs/academic/class/15451-s06/www/lectures/scrabble.pdf)
+Her er pseudokode av funskjonen, som beskrevet i artikkelen nevnt over
 
 ```
 LeftPart(PartialWord, node N in DAWG, limit) = 
@@ -101,7 +101,7 @@ LeftPart(PartialWord, node N in DAWG, limit) =
 ```
 
 I koden vår sender vi også med `anchorIndex` som lar hos holde styr på hvilken `Square` som er `anchor`, og `rack` som representerer racket vårt.
-Siden `Rack` er immutable, trenger vi ikke fjerne/legge tilbake brikker på racket, men vi kan bruke `Rack` sin funksjon `without()` som returnerer et nytt `Rack` uten brikken som vi ønsker å fjerne, når vi kaller på neste `leftPart()`.
+Siden `Rack` er immutable, trenger vi ikke fjerne/legge tilbake brikker på racket, men vi kan bruke `Rack` sin funksjon `without()` som returnerer et nytt `Rack` uten brikken som vi ønsker å fjerne, når vi kaller på neste `leftPart()`. Vi kan bruke `outgoingTransitions` for å finne edges ut av en `MDAGNode`.
 
 <details>
   <summary>Eksempel på implementasjon av `leftPart()`</summary>
@@ -130,7 +130,72 @@ private fun leftPart(
 
 ## Extend right
 
+For hver `left part` blir det gjort et kall på `extendRight()` for å fullføre ord, og det er den funksjonen vi skal implementere her.
+I motsetning til en `left part` kan en høyre del av et ord bestå av både brikker fra racket og brikker som allerede ligger på brettet.
 
+Her er pseudokode av funskjonen, som beskrevet i artikkelen nevnt over
+
+```
+ExtendRight(PartialWord, node N in DAWG, square)
+if square is vacant then
+    if N is a terminal node then
+        LegalMove(PartialWord)
+    for each edge E out of N
+        if the letter L labeling edge E is in our rack AND L is in the cross-check set of square then
+            remove a tile L from the rack
+            let N' be the node reached by following edge E
+            let next-square be the square to the right of square
+            ExtendRight(PartialWord + L, N', next-square)
+            put the tile L back into the rack
+else
+    let L be the letter occupying square
+    if N has an edge labeled by L that leads to some node N' then
+        let next-square be the square to the right of square
+        ExtendRight(PartialWord + L, N', next-square)
+```
+
+Vi kan bruke `isAcceptNode` for å finne ut om en `MDAGNode` er en "terminal node".
+I koden vår tilsvarer `LegalMove(PartialWord)` å legge til en ny `RowMove` i listen `rowMoves`
+
+For å få med seg siste felt på hver rad kan det være lurt å legge til et tomt felt på enden av hver rad, ved f.eks å gjøre noe sånt som dette
+```kotlin
+val square = squares.getOrElse(index) { Square() }
+```
+
+<details>
+  <summary>Eksempel på implementasjon av `extendRight()`</summary>
+    
+  ```kotlin
+private fun extendRight(
+        partialWord: String,
+        node: MDAGNode,
+        anchorIndex: Int,
+        index: Int,
+        rack: Rack
+    ) {
+        val square = squares.getOrElse(index) { Square() }
+        if (!square.isOccupied()) {
+            if (index != anchorIndex && node.isAcceptNode) {
+                rowMoves.add(RowMove(partialWord,
+                    index - partialWord.length,
+                    calculateScore(partialWord, index - partialWord.length)))
+            }
+            node.outgoingTransitions.entries.forEach {
+                if (rack.contains(it.key) && square.crossChecksContains(it.key)) {
+                    extendRight(partialWord + it.key, it.value, anchorIndex, index + 1, rack.without(it.key))
+                }
+            }
+        } else {
+            square.getLetter()?.let {
+                if (node.hasOutgoingTransition(it)) {
+                    extendRight(partialWord + it, node.transition(it), anchorIndex, index + 1, rack)
+                }
+            }
+        }
+    }
+  ```
+  
+</details>
 
 ## Blanke
 
