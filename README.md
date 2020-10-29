@@ -156,6 +156,8 @@ else
         ExtendRight(PartialWord + L, N', next-square)
 ```
 
+I koden vår har vi en parameter `anchorIndex`. Vi bruker denne for å sjekke at vi ikke står på anchorSquare når vi sjekker om `N` er en `terminal node`, sånn at vi unngår å tolke ord på brettet som et nytt legg.
+
 Vi kan bruke `isAcceptNode` for å finne ut om en `MDAGNode` er en `terminal node`.
 
 I koden vår tilsvarer `LegalMove(PartialWord)` å legge til en ny `RowMove` i listen `rowMoves`
